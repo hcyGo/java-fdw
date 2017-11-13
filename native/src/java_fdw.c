@@ -34,33 +34,31 @@ extern Datum java_fdw_validator(PG_FUNCTION_ARGS);
 PG_FUNCTION_INFO_V1(java_fdw_handler);
 PG_FUNCTION_INFO_V1(java_fdw_validator);
 
-
 /* callback functions */
 #if (PG_VERSION_NUM >= 90200)
 static void javaGetForeignRelSize(PlannerInfo *root,
-						   RelOptInfo *baserel,
-						   Oid foreigntableid);
+								  RelOptInfo *baserel,
+								  Oid foreigntableid);
 
 static void javaGetForeignPaths(PlannerInfo *root,
-						 RelOptInfo *baserel,
-						 Oid foreigntableid);
+								RelOptInfo *baserel,
+								Oid foreigntableid);
 
 #if (PG_VERSION_NUM < 90500)
 static ForeignScan *javaGetForeignPlan(PlannerInfo *root,
-						RelOptInfo *baserel,
-						Oid foreigntableid,
-						ForeignPath *best_path,
-						List *tlist,
-						List *scan_clauses);
+									   RelOptInfo *baserel,
+									   Oid foreigntableid,
+									   ForeignPath *best_path,
+									   List *tlist,
+									   List *scan_clauses);
 #else
 static ForeignScan *javaGetForeignPlan(PlannerInfo *root,
-						RelOptInfo *baserel,
-						Oid foreigntableid,
-						ForeignPath *best_path,
-						List *tlist,
-						List *scan_clauses,
-						Plan *outer_plan
-	);
+									   RelOptInfo *baserel,
+									   Oid foreigntableid,
+									   ForeignPath *best_path,
+									   List *tlist,
+									   List *scan_clauses,
+									   Plan *outer_plan);
 #endif
 
 #else /* 9.1 only */
@@ -68,7 +66,7 @@ static FdwPlan *javaPlanForeignScan(Oid foreigntableid, PlannerInfo *root, RelOp
 #endif
 
 static void javaBeginForeignScan(ForeignScanState *node,
-						  int eflags);
+								 int eflags);
 
 static TupleTableSlot *javaIterateForeignScan(ForeignScanState *node);
 
@@ -78,79 +76,78 @@ static void javaEndForeignScan(ForeignScanState *node);
 
 #if (PG_VERSION_NUM >= 90300)
 static void javaAddForeignUpdateTargets(Query *parsetree,
-								 RangeTblEntry *target_rte,
-								 Relation target_relation);
+										RangeTblEntry *target_rte,
+										Relation target_relation);
 
 static List *javaPlanForeignModify(PlannerInfo *root,
-						   ModifyTable *plan,
-						   Index resultRelation,
-						   int subplan_index);
+								   ModifyTable *plan,
+								   Index resultRelation,
+								   int subplan_index);
 
 static void javaBeginForeignModify(ModifyTableState *mtstate,
-							ResultRelInfo *rinfo,
-							List *fdw_private,
-							int subplan_index,
-							int eflags);
+								   ResultRelInfo *rinfo,
+								   List *fdw_private,
+								   int subplan_index,
+								   int eflags);
 
 static TupleTableSlot *javaExecForeignInsert(EState *estate,
-						   ResultRelInfo *rinfo,
-						   TupleTableSlot *slot,
-						   TupleTableSlot *planSlot);
+											 ResultRelInfo *rinfo,
+											 TupleTableSlot *slot,
+											 TupleTableSlot *planSlot);
 
 static TupleTableSlot *javaExecForeignUpdate(EState *estate,
-						   ResultRelInfo *rinfo,
-						   TupleTableSlot *slot,
-						   TupleTableSlot *planSlot);
+											 ResultRelInfo *rinfo,
+											 TupleTableSlot *slot,
+											 TupleTableSlot *planSlot);
 
 static TupleTableSlot *javaExecForeignDelete(EState *estate,
-						   ResultRelInfo *rinfo,
-						   TupleTableSlot *slot,
-						   TupleTableSlot *planSlot);
+											 ResultRelInfo *rinfo,
+											 TupleTableSlot *slot,
+											 TupleTableSlot *planSlot);
 
 static void javaEndForeignModify(EState *estate,
-						  ResultRelInfo *rinfo);
+								 ResultRelInfo *rinfo);
 
-static int	javaIsForeignRelUpdatable(Relation rel);
+static int javaIsForeignRelUpdatable(Relation rel);
 
 #endif
 
 static void javaExplainForeignScan(ForeignScanState *node,
-							struct ExplainState * es);
+								   struct ExplainState *es);
 
 #if (PG_VERSION_NUM >= 90300)
 static void javaExplainForeignModify(ModifyTableState *mtstate,
-							  ResultRelInfo *rinfo,
-							  List *fdw_private,
-							  int subplan_index,
-							  struct ExplainState * es);
+									 ResultRelInfo *rinfo,
+									 List *fdw_private,
+									 int subplan_index,
+									 struct ExplainState *es);
 #endif
 
 #if (PG_VERSION_NUM >= 90200)
 static bool javaAnalyzeForeignTable(Relation relation,
-							 AcquireSampleRowsFunc *func,
-							 BlockNumber *totalpages);
+									AcquireSampleRowsFunc *func,
+									BlockNumber *totalpages);
 #endif
 
 #if (PG_VERSION_NUM >= 90500)
 
 static void javaGetForeignJoinPaths(PlannerInfo *root,
-							 RelOptInfo *joinrel,
-							 RelOptInfo *outerrel,
-							 RelOptInfo *innerrel,
-							 JoinType jointype,
-							 JoinPathExtraData *extra);
-
+									RelOptInfo *joinrel,
+									RelOptInfo *outerrel,
+									RelOptInfo *innerrel,
+									JoinType jointype,
+									JoinPathExtraData *extra);
 
 static RowMarkType javaGetForeignRowMarkType(RangeTblEntry *rte,
-							   LockClauseStrength strength);
+											 LockClauseStrength strength);
 
 static HeapTuple javaRefetchForeignRow(EState *estate,
-						   ExecRowMark *erm,
-						   Datum rowid,
-						   bool *updated);
+									   ExecRowMark *erm,
+									   Datum rowid,
+									   bool *updated);
 
 static List *javaImportForeignSchema(ImportForeignSchemaStmt *stmt,
-							 Oid serverOid);
+									 Oid serverOid);
 
 #endif
 
@@ -167,7 +164,7 @@ static List *javaImportForeignSchema(ImportForeignSchemaStmt *stmt,
 struct javaFdwOption
 {
 	const char *optname;
-	Oid			optcontext;		/* Oid of catalog in which option may appear */
+	Oid optcontext; /* Oid of catalog in which option may appear */
 };
 
 /*
@@ -176,8 +173,8 @@ struct javaFdwOption
  */
 typedef struct
 {
-	char	   *foo;
-	int			bar;
+	char *foo;
+	int bar;
 } JavaFdwPlanState;
 
 /*
@@ -190,8 +187,8 @@ typedef struct
  */
 typedef struct
 {
-	char	   *baz;
-	int			blurfl;
+	char *baz;
+	int blurfl;
 } JavaFdwScanState;
 
 /*
@@ -204,13 +201,12 @@ typedef struct
  */
 typedef struct
 {
-	char	   *chimp;
-	int			chump;
+	char *chimp;
+	int chump;
 } JavaFdwModifyState;
 
-
 Datum
-java_fdw_handler(PG_FUNCTION_ARGS)
+	java_fdw_handler(PG_FUNCTION_ARGS)
 {
 	FdwRoutine *fdwroutine = makeNode(FdwRoutine);
 
@@ -230,40 +226,39 @@ java_fdw_handler(PG_FUNCTION_ARGS)
 	/* these are required */
 #if (PG_VERSION_NUM >= 90200)
 	fdwroutine->GetForeignRelSize = javaGetForeignRelSize; /* S U D */
-	fdwroutine->GetForeignPaths = javaGetForeignPaths;		/* S U D */
-	fdwroutine->GetForeignPlan = javaGetForeignPlan;		/* S U D */
+	fdwroutine->GetForeignPaths = javaGetForeignPaths;	 /* S U D */
+	fdwroutine->GetForeignPlan = javaGetForeignPlan;	   /* S U D */
 #else
-	fdwroutine->PlanForeignScan = javaPlanForeignScan;     /* S */
+	fdwroutine->PlanForeignScan = javaPlanForeignScan; /* S */
 #endif
-	fdwroutine->BeginForeignScan = javaBeginForeignScan;	/* S U D */
-	fdwroutine->IterateForeignScan = javaIterateForeignScan;		/* S */
-	fdwroutine->ReScanForeignScan = javaReScanForeignScan; /* S */
-	fdwroutine->EndForeignScan = javaEndForeignScan;		/* S U D */
+	fdwroutine->BeginForeignScan = javaBeginForeignScan;	 /* S U D */
+	fdwroutine->IterateForeignScan = javaIterateForeignScan; /* S */
+	fdwroutine->ReScanForeignScan = javaReScanForeignScan;   /* S */
+	fdwroutine->EndForeignScan = javaEndForeignScan;		 /* S U D */
 
 	/* remainder are optional - use NULL if not required */
 	/* support for insert / update / delete */
 #if (PG_VERSION_NUM >= 90300)
 	fdwroutine->IsForeignRelUpdatable = javaIsForeignRelUpdatable;
-	fdwroutine->AddForeignUpdateTargets = javaAddForeignUpdateTargets;		/* U D */
-	fdwroutine->PlanForeignModify = javaPlanForeignModify; /* I U D */
-	fdwroutine->BeginForeignModify = javaBeginForeignModify;		/* I U D */
-	fdwroutine->ExecForeignInsert = javaExecForeignInsert; /* I */
-	fdwroutine->ExecForeignUpdate = javaExecForeignUpdate; /* U */
-	fdwroutine->ExecForeignDelete = javaExecForeignDelete; /* D */
-	fdwroutine->EndForeignModify = javaEndForeignModify;	/* I U D */
+	fdwroutine->AddForeignUpdateTargets = javaAddForeignUpdateTargets; /* U D */
+	fdwroutine->PlanForeignModify = javaPlanForeignModify;			   /* I U D */
+	fdwroutine->BeginForeignModify = javaBeginForeignModify;		   /* I U D */
+	fdwroutine->ExecForeignInsert = javaExecForeignInsert;			   /* I */
+	fdwroutine->ExecForeignUpdate = javaExecForeignUpdate;			   /* U */
+	fdwroutine->ExecForeignDelete = javaExecForeignDelete;			   /* D */
+	fdwroutine->EndForeignModify = javaEndForeignModify;			   /* I U D */
 #endif
 
 	/* support for EXPLAIN */
-	fdwroutine->ExplainForeignScan = javaExplainForeignScan;		/* EXPLAIN S U D */
+	fdwroutine->ExplainForeignScan = javaExplainForeignScan; /* EXPLAIN S U D */
 #if (PG_VERSION_NUM >= 90300)
-	fdwroutine->ExplainForeignModify = javaExplainForeignModify;	/* EXPLAIN I U D */
+	fdwroutine->ExplainForeignModify = javaExplainForeignModify; /* EXPLAIN I U D */
 #endif
 
 #if (PG_VERSION_NUM >= 90200)
 	/* support for ANALYSE */
-	fdwroutine->AnalyzeForeignTable = javaAnalyzeForeignTable;		/* ANALYZE only */
+	fdwroutine->AnalyzeForeignTable = javaAnalyzeForeignTable; /* ANALYZE only */
 #endif
-
 
 #if (PG_VERSION_NUM >= 90500)
 	/* Support functions for IMPORT FOREIGN SCHEMA */
@@ -278,14 +273,13 @@ java_fdw_handler(PG_FUNCTION_ARGS)
 
 #endif
 
-
 	PG_RETURN_POINTER(fdwroutine);
 }
 
 Datum
-java_fdw_validator(PG_FUNCTION_ARGS)
+	java_fdw_validator(PG_FUNCTION_ARGS)
 {
-	List	   *options_list = untransformRelOptions(PG_GETARG_DATUM(0));
+	List *options_list = untransformRelOptions(PG_GETARG_DATUM(0));
 
 	elog(DEBUG1, "entering function %s", __func__);
 
@@ -305,8 +299,8 @@ java_fdw_validator(PG_FUNCTION_ARGS)
 #if (PG_VERSION_NUM >= 90200)
 static void
 javaGetForeignRelSize(PlannerInfo *root,
-						   RelOptInfo *baserel,
-						   Oid foreigntableid)
+					  RelOptInfo *baserel,
+					  Oid foreigntableid)
 {
 	/*
 	 * Obtain relation size estimates for a foreign table. This is called at
@@ -332,16 +326,15 @@ javaGetForeignRelSize(PlannerInfo *root,
 	baserel->rows = 0;
 
 	plan_state = palloc0(sizeof(JavaFdwPlanState));
-	baserel->fdw_private = (void *) plan_state;
+	baserel->fdw_private = (void *)plan_state;
 
 	/* initialize required state in plan_state */
-
 }
 
 static void
 javaGetForeignPaths(PlannerInfo *root,
-						 RelOptInfo *baserel,
-						 Oid foreigntableid)
+					RelOptInfo *baserel,
+					Oid foreigntableid)
 {
 	/*
 	 * Create possible access paths for a scan on a foreign table. This is
@@ -362,8 +355,8 @@ javaGetForeignPaths(PlannerInfo *root,
 	 * JavaFdwPlanState *plan_state = baserel->fdw_private;
 	 */
 
-	Cost		startup_cost,
-				total_cost;
+	Cost startup_cost,
+		total_cost;
 
 	elog(DEBUG1, "entering function %s", __func__);
 
@@ -372,39 +365,38 @@ javaGetForeignPaths(PlannerInfo *root,
 
 	/* Create a ForeignPath node and add it as only possible path */
 	add_path(baserel, (Path *)
-			 create_foreignscan_path(root, baserel,
+						  create_foreignscan_path(root, baserel,
 #if (PG_VERSION_NUM >= 90600)
-									 NULL,      /* default pathtarget */
+												  NULL, /* default pathtarget */
 #endif
-									 baserel->rows,
-									 startup_cost,
-									 total_cost,
-									 NIL,		/* no pathkeys */
-									 NULL,		/* no outer rel either */
+												  baserel->rows,
+												  startup_cost,
+												  total_cost,
+												  NIL,  /* no pathkeys */
+												  NULL, /* no outer rel either */
 #if (PG_VERSION_NUM >= 90500)
-									 NULL,      /* no extra plan */
+												  NULL, /* no extra plan */
 #endif
-									 NIL));		/* no fdw_private data */
+												  NIL)); /* no fdw_private data */
 }
-
 
 #if (PG_VERSION_NUM < 90500)
 static ForeignScan *
 javaGetForeignPlan(PlannerInfo *root,
-						RelOptInfo *baserel,
-						Oid foreigntableid,
-						ForeignPath *best_path,
-						List *tlist,
-						List *scan_clauses)
+				   RelOptInfo *baserel,
+				   Oid foreigntableid,
+				   ForeignPath *best_path,
+				   List *tlist,
+				   List *scan_clauses)
 #else
 static ForeignScan *
 javaGetForeignPlan(PlannerInfo *root,
-						RelOptInfo *baserel,
-						Oid foreigntableid,
-						ForeignPath *best_path,
-						List *tlist,
-						List *scan_clauses,
-						Plan *outer_plan)
+				   RelOptInfo *baserel,
+				   Oid foreigntableid,
+				   ForeignPath *best_path,
+				   List *tlist,
+				   List *scan_clauses,
+				   Plan *outer_plan)
 #endif
 {
 	/*
@@ -423,7 +415,7 @@ javaGetForeignPlan(PlannerInfo *root,
 	 * JavaFdwPlanState *plan_state = baserel->fdw_private;
 	 */
 
-	Index		scan_relid = baserel->relid;
+	Index scan_relid = baserel->relid;
 
 	/*
 	 * We have no native ability to evaluate restriction clauses, so we just
@@ -438,23 +430,22 @@ javaGetForeignPlan(PlannerInfo *root,
 	scan_clauses = extract_actual_clauses(scan_clauses, false);
 
 	/* Create the ForeignScan node */
-#if(PG_VERSION_NUM < 90500)
+#if (PG_VERSION_NUM < 90500)
 	return make_foreignscan(tlist,
 							scan_clauses,
 							scan_relid,
-							NIL,	/* no expressions to evaluate */
-							NIL);		/* no private state either */
+							NIL,  /* no expressions to evaluate */
+							NIL); /* no private state either */
 #else
 	return make_foreignscan(tlist,
 							scan_clauses,
 							scan_relid,
-							NIL,	/* no expressions to evaluate */
-							NIL,	/* no private state either */
-							NIL,	/* no custom tlist */
-							NIL,    /* no remote quals */
+							NIL, /* no expressions to evaluate */
+							NIL, /* no private state either */
+							NIL, /* no custom tlist */
+							NIL, /* no remote quals */
 							outer_plan);
 #endif
-
 }
 
 #else
@@ -462,7 +453,7 @@ javaGetForeignPlan(PlannerInfo *root,
 static FdwPlan *
 javaPlanForeignScan(Oid foreigntableid, PlannerInfo *root, RelOptInfo *baserel)
 {
-	FdwPlan    *fdwplan;
+	FdwPlan *fdwplan;
 	fdwplan = makeNode(FdwPlan);
 	fdwplan->fdw_private = NIL;
 	fdwplan->startup_cost = 0;
@@ -472,10 +463,9 @@ javaPlanForeignScan(Oid foreigntableid, PlannerInfo *root, RelOptInfo *baserel)
 
 #endif
 
-
 static void
 javaBeginForeignScan(ForeignScanState *node,
-						  int eflags)
+					 int eflags)
 {
 	/*
 	 * Begin executing a foreign scan. This is called during executor startup.
@@ -496,13 +486,11 @@ javaBeginForeignScan(ForeignScanState *node,
 	 *
 	 */
 
-	JavaFdwScanState * scan_state = palloc0(sizeof(JavaFdwScanState));
+	JavaFdwScanState *scan_state = palloc0(sizeof(JavaFdwScanState));
 	node->fdw_state = scan_state;
 
 	elog(DEBUG1, "entering function %s", __func__);
-
 }
-
 
 static TupleTableSlot *
 javaIterateForeignScan(ForeignScanState *node)
@@ -531,7 +519,6 @@ javaIterateForeignScan(ForeignScanState *node)
 	 * (just as you would need to do in the case of a data type mismatch).
 	 */
 
-
 	/* ----
 	 * JavaFdwScanState *scan_state =
 	 *	 (JavaFdwScanState *) node->fdw_state;
@@ -550,7 +537,6 @@ javaIterateForeignScan(ForeignScanState *node)
 	return slot;
 }
 
-
 static void
 javaReScanForeignScan(ForeignScanState *node)
 {
@@ -567,9 +553,7 @@ javaReScanForeignScan(ForeignScanState *node)
 	 */
 
 	elog(DEBUG1, "entering function %s", __func__);
-
 }
-
 
 static void
 javaEndForeignScan(ForeignScanState *node)
@@ -587,15 +571,13 @@ javaEndForeignScan(ForeignScanState *node)
 	 */
 
 	elog(DEBUG1, "entering function %s", __func__);
-
 }
-
 
 #if (PG_VERSION_NUM >= 90300)
 static void
 javaAddForeignUpdateTargets(Query *parsetree,
-								 RangeTblEntry *target_rte,
-								 Relation target_relation)
+							RangeTblEntry *target_rte,
+							Relation target_relation)
 {
 	/*
 	 * UPDATE and DELETE operations are performed against rows previously
@@ -625,15 +607,13 @@ javaAddForeignUpdateTargets(Query *parsetree,
 	 */
 
 	elog(DEBUG1, "entering function %s", __func__);
-
 }
-
 
 static List *
 javaPlanForeignModify(PlannerInfo *root,
-						   ModifyTable *plan,
-						   Index resultRelation,
-						   int subplan_index)
+					  ModifyTable *plan,
+					  Index resultRelation,
+					  int subplan_index)
 {
 	/*
 	 * Perform any additional planning actions needed for an insert, update,
@@ -660,13 +640,12 @@ javaPlanForeignModify(PlannerInfo *root,
 	return NULL;
 }
 
-
 static void
 javaBeginForeignModify(ModifyTableState *mtstate,
-							ResultRelInfo *rinfo,
-							List *fdw_private,
-							int subplan_index,
-							int eflags)
+					   ResultRelInfo *rinfo,
+					   List *fdw_private,
+					   int subplan_index,
+					   int eflags)
 {
 	/*
 	 * Begin executing a foreign table modification operation. This routine is
@@ -699,15 +678,13 @@ javaBeginForeignModify(ModifyTableState *mtstate,
 	rinfo->ri_FdwState = modify_state;
 
 	elog(DEBUG1, "entering function %s", __func__);
-
 }
-
 
 static TupleTableSlot *
 javaExecForeignInsert(EState *estate,
-						   ResultRelInfo *rinfo,
-						   TupleTableSlot *slot,
-						   TupleTableSlot *planSlot)
+					  ResultRelInfo *rinfo,
+					  TupleTableSlot *slot,
+					  TupleTableSlot *planSlot)
 {
 	/*
 	 * Insert one tuple into the foreign table. estate is global execution
@@ -747,12 +724,11 @@ javaExecForeignInsert(EState *estate,
 	return slot;
 }
 
-
 static TupleTableSlot *
 javaExecForeignUpdate(EState *estate,
-						   ResultRelInfo *rinfo,
-						   TupleTableSlot *slot,
-						   TupleTableSlot *planSlot)
+					  ResultRelInfo *rinfo,
+					  TupleTableSlot *slot,
+					  TupleTableSlot *planSlot)
 {
 	/*
 	 * Update one tuple in the foreign table. estate is global execution state
@@ -792,12 +768,11 @@ javaExecForeignUpdate(EState *estate,
 	return slot;
 }
 
-
 static TupleTableSlot *
 javaExecForeignDelete(EState *estate,
-						   ResultRelInfo *rinfo,
-						   TupleTableSlot *slot,
-						   TupleTableSlot *planSlot)
+					  ResultRelInfo *rinfo,
+					  TupleTableSlot *slot,
+					  TupleTableSlot *planSlot)
 {
 	/*
 	 * Delete one tuple from the foreign table. estate is global execution
@@ -834,10 +809,9 @@ javaExecForeignDelete(EState *estate,
 	return slot;
 }
 
-
 static void
 javaEndForeignModify(EState *estate,
-						  ResultRelInfo *rinfo)
+					 ResultRelInfo *rinfo)
 {
 	/*
 	 * End the table update and release resources. It is normally not
@@ -855,7 +829,6 @@ javaEndForeignModify(EState *estate,
 	 */
 
 	elog(DEBUG1, "entering function %s", __func__);
-
 }
 
 static int
@@ -884,10 +857,9 @@ javaIsForeignRelUpdatable(Relation rel)
 }
 #endif
 
-
 static void
 javaExplainForeignScan(ForeignScanState *node,
-							struct ExplainState * es)
+					   struct ExplainState *es)
 {
 	/*
 	 * Print additional EXPLAIN output for a foreign table scan. This function
@@ -901,17 +873,15 @@ javaExplainForeignScan(ForeignScanState *node,
 	 */
 
 	elog(DEBUG1, "entering function %s", __func__);
-
 }
-
 
 #if (PG_VERSION_NUM >= 90300)
 static void
 javaExplainForeignModify(ModifyTableState *mtstate,
-							  ResultRelInfo *rinfo,
-							  List *fdw_private,
-							  int subplan_index,
-							  struct ExplainState * es)
+						 ResultRelInfo *rinfo,
+						 List *fdw_private,
+						 int subplan_index,
+						 struct ExplainState *es)
 {
 	/*
 	 * Print additional EXPLAIN output for a foreign table update. This
@@ -932,16 +902,14 @@ javaExplainForeignModify(ModifyTableState *mtstate,
 	 */
 
 	elog(DEBUG1, "entering function %s", __func__);
-
 }
 #endif
-
 
 #if (PG_VERSION_NUM >= 90200)
 static bool
 javaAnalyzeForeignTable(Relation relation,
-							 AcquireSampleRowsFunc *func,
-							 BlockNumber *totalpages)
+						AcquireSampleRowsFunc *func,
+						BlockNumber *totalpages)
 {
 	/* ----
 	 * This function is called when ANALYZE is executed on a foreign table. If
@@ -976,15 +944,14 @@ javaAnalyzeForeignTable(Relation relation,
 }
 #endif
 
-
 #if (PG_VERSION_NUM >= 90500)
 static void
 javaGetForeignJoinPaths(PlannerInfo *root,
-							 RelOptInfo *joinrel,
-							 RelOptInfo *outerrel,
-							 RelOptInfo *innerrel,
-							 JoinType jointype,
-							 JoinPathExtraData *extra)
+						RelOptInfo *joinrel,
+						RelOptInfo *outerrel,
+						RelOptInfo *innerrel,
+						JoinType jointype,
+						JoinPathExtraData *extra)
 {
 	/*
 	 * Create possible access paths for a join of two (or more) foreign tables
@@ -1017,13 +984,11 @@ javaGetForeignJoinPaths(PlannerInfo *root,
 	 */
 
 	elog(DEBUG1, "entering function %s", __func__);
-
 }
-
 
 static RowMarkType
 javaGetForeignRowMarkType(RangeTblEntry *rte,
-							   LockClauseStrength strength)
+						  LockClauseStrength strength)
 {
 	/*
 	 * Report which row-marking option to use for a foreign table. rte is the
@@ -1043,14 +1008,13 @@ javaGetForeignRowMarkType(RangeTblEntry *rte,
 	elog(DEBUG1, "entering function %s", __func__);
 
 	return ROW_MARK_COPY;
-
 }
 
 static HeapTuple
 javaRefetchForeignRow(EState *estate,
-						   ExecRowMark *erm,
-						   Datum rowid,
-						   bool *updated)
+					  ExecRowMark *erm,
+					  Datum rowid,
+					  bool *updated)
 {
 	/*
 	 * Re-fetch one tuple from the foreign table, after locking it if
@@ -1087,13 +1051,11 @@ javaRefetchForeignRow(EState *estate,
 	elog(DEBUG1, "entering function %s", __func__);
 
 	return NULL;
-
 }
-
 
 static List *
 javaImportForeignSchema(ImportForeignSchemaStmt *stmt,
-							 Oid serverOid)
+						Oid serverOid)
 {
 	/*
 	 * Obtain a list of foreign table creation commands. This function is
